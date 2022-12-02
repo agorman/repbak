@@ -1,0 +1,22 @@
+log_path: /var/log/repbak.log
+log_level: debug
+http:
+  addr: 127.0.0.1
+  port: 4060
+mysql:
+  retention: 7
+  output_path: /asc/array1/repbak/mysql.dump
+  schedule: "* * * * *"
+  executable_args: --add-drop-database --all-databases -u root -pASCnsvDBpwd12345; -h 127.0.0.1
+email:
+  host: mail.server288.com
+  port: 587
+  user: andyg
+  pass: coke4200
+  starttls: true
+  ssl: false
+  subject: MAM Database Replication Failure
+  from: andyg@apacesystems.com
+  to:
+    - andy.g.gorman@gmail.com
+
