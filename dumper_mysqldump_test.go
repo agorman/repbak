@@ -1,7 +1,6 @@
 package repbak
 
 import (
-	"errors"
 	"testing"
 
 	_ "github.com/go-sql-driver/mysql"
