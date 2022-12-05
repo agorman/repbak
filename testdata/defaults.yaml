@@ -1,0 +1,11 @@
+mysql:
+  output_path: /tmp/mysql.dump
+  schedule: "0 0 * * *"
+email:
+  host: 1.1.1.1.1
+  user: me
+  pass: pass
+  from: me@me.com
+  to:
+    - they@me.com
+    - them@me.com

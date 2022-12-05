@@ -63,6 +63,10 @@ func (c *Config) validate() error {
 		}
 	}
 
+	if c.Email == nil {
+		return errors.New("Missing required email configuration")
+	}
+
 	if c.Email.Host == "" {
 		return errors.New("Missing required host entry for email")
 	}
