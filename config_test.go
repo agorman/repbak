@@ -17,13 +17,13 @@ func TestConfig(t *testing.T) {
 	assert.Equal(t, config.HTTP.Addr, "0.0.0.0")
 	assert.Equal(t, config.HTTP.Port, 4060)
 
-	assert.NotNil(t, config.MySQL)
-	assert.Equal(t, config.MySQL.Retention, 30)
-	assert.Equal(t, config.MySQL.OutputPath, "/mnt/backups/mysql.dump")
-	assert.Equal(t, config.MySQL.Schedule, "0 0 * * *")
-	assert.Equal(t, config.MySQL.ExecutablePath, "mysqldump")
-	assert.Equal(t, config.MySQL.ExecutableArgs, "--add-drop-database --all-databases -u user -ppass -h 127.0.0.1")
-	assert.Equal(t, config.MySQL.TimeLimit, "8h")
+	assert.NotNil(t, config.MySQLDump)
+	assert.Equal(t, config.MySQLDump.Retention, 30)
+	assert.Equal(t, config.MySQLDump.OutputPath, "/mnt/backups/mysql.dump")
+	assert.Equal(t, config.MySQLDump.Schedule, "0 0 * * *")
+	assert.Equal(t, config.MySQLDump.ExecutablePath, "mysqldump")
+	assert.Equal(t, config.MySQLDump.ExecutableArgs, "--add-drop-database --all-databases -u user -ppass -h 127.0.0.1")
+	assert.Equal(t, config.MySQLDump.TimeLimit, "8h")
 
 	assert.NotNil(t, config.Email)
 	assert.Equal(t, config.Email.Host, "1.1.1.1.1")
@@ -55,9 +55,9 @@ func TestConfigDefaults(t *testing.T) {
 	assert.Equal(t, config.Email.SSL, false)
 	assert.Equal(t, config.Email.Subject, "Database Replication Failure")
 
-	assert.Equal(t, config.MySQL.Retention, 7)
-	assert.Equal(t, config.MySQL.ExecutablePath, "mysqldump")
-	assert.Equal(t, config.MySQL.ExecutableArgs, "--add-drop-database --all-databases")
+	assert.Equal(t, config.MySQLDump.Retention, 7)
+	assert.Equal(t, config.MySQLDump.ExecutablePath, "mysqldump")
+	assert.Equal(t, config.MySQLDump.ExecutableArgs, "--add-drop-database --all-databases")
 
 	assert.Equal(t, config.HTTP.Addr, "127.0.0.1")
 	assert.Equal(t, config.HTTP.Port, 4060)
@@ -85,15 +85,15 @@ func TestConfigRequired(t *testing.T) {
 	err = config.validate()
 	assert.Error(t, err)
 
-	config.MySQL = &MySQL{}
+	config.MySQLDump = &MySQLDump{}
 	err = config.validate()
 	assert.Error(t, err)
 
-	config.MySQL.OutputPath = "/tmp/mysql.dump"
+	config.MySQLDump.OutputPath = "/tmp/mysql.dump"
 	err = config.validate()
 	assert.Error(t, err)
 
-	config.MySQL.Schedule = "0 0 * * *"
+	config.MySQLDump.Schedule = "0 0 * * *"
 	err = config.validate()
 	assert.Nil(t, err)
 }
@@ -149,7 +149,7 @@ func TestConfigBadTimeLimit(t *testing.T) {
 	config, err := OpenConfig("./testdata/repbak.yaml")
 	assert.Nil(t, err)
 
-	config.MySQL.TimeLimit = "asdf"
+	config.MySQLDump.TimeLimit = "asdf"
 	err = config.validate()
 	assert.Error(t, err)
 }

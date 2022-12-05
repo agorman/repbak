@@ -11,7 +11,7 @@ func TestRepBak(t *testing.T) {
 	config, err := OpenConfig("./testdata/repbak.yaml")
 	assert.Nil(t, err)
 
-	dumper := NewMySQLDumper(config)
+	dumper := NewMySQLDumpDumper(config)
 
 	notifier := NewEmailNotifier(config)
 

@@ -13,29 +13,29 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// MySQLDumper dumps a mysql backup to a file.
-type MySQLDumper struct {
+// MySQLDumpDumper dumps a mysql backup to a file.
+type MySQLDumpDumper struct {
 	config  *Config
 	running bool
 	mu      sync.Mutex
 	cancel  context.CancelFunc
 }
 
-// NewMySQLDumper creates a MySQLDumper.
-func NewMySQLDumper(config *Config) *MySQLDumper {
-	return &MySQLDumper{
+// NewMySQLDumpDumper creates a NewMySQLDumpDumper.
+func NewMySQLDumpDumper(config *Config) *MySQLDumpDumper {
+	return &MySQLDumpDumper{
 		config: config,
 		mu:     sync.Mutex{},
 	}
 }
 
 // Dump dumps the mysql data to a file based on the settings in config.
-func (d *MySQLDumper) Dump() error {
+func (d *MySQLDumpDumper) Dump() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	if d.config.MySQL.timeLimit != 0 {
-		ctx, cancel = context.WithTimeout(ctx, d.config.MySQL.timeLimit)
+	if d.config.MySQLDump.timeLimit != 0 {
+		ctx, cancel = context.WithTimeout(ctx, d.config.MySQLDump.timeLimit)
 		defer cancel()
 	}
 
@@ -51,18 +51,18 @@ func (d *MySQLDumper) Dump() error {
 	d.cancel = cancel
 	d.mu.Unlock()
 
-	args := strings.Fields(d.config.MySQL.ExecutableArgs)
+	args := strings.Fields(d.config.MySQLDump.ExecutableArgs)
 
-	cmd := exec.CommandContext(ctx, d.config.MySQL.ExecutablePath, args...)
+	cmd := exec.CommandContext(ctx, d.config.MySQLDump.ExecutablePath, args...)
 
-	if err := os.MkdirAll(filepath.Base(d.config.MySQL.OutputPath), 0644); err != nil {
-		return fmt.Errorf("MySQL Dumper: failed to create dump directory %s: %v", filepath.Base(d.config.MySQL.OutputPath), err)
+	if err := os.MkdirAll(filepath.Base(d.config.MySQLDump.OutputPath), 0644); err != nil {
+		return fmt.Errorf("MySQL Dumper: failed to create dump directory %s: %v", filepath.Base(d.config.MySQLDump.OutputPath), err)
 	}
 
 	// write output into the dump file
-	dump, err := os.Create(d.config.MySQL.OutputPath)
+	dump, err := os.Create(d.config.MySQLDump.OutputPath)
 	if err != nil {
-		return fmt.Errorf("MySQL Dumper: failed to create dump file %s: %v", d.config.MySQL.OutputPath, err)
+		return fmt.Errorf("MySQL Dumper: failed to create dump file %s: %v", d.config.MySQLDump.OutputPath, err)
 	}
 	cmd.Stdout = dump
 
@@ -100,7 +100,7 @@ func (d *MySQLDumper) Dump() error {
 }
 
 // Stop stops the current dump if one is running.
-func (d *MySQLDumper) Stop() {
+func (d *MySQLDumpDumper) Stop() {
 	if d.cancel != nil {
 		d.cancel()
 	}

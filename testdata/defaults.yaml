@@ -1,4 +1,4 @@
-mysql:
+mysqldump:
   output_path: /tmp/mysql.dump
   schedule: "0 0 * * *"
 email:

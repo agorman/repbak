@@ -9,10 +9,10 @@
 Repbak is a simple database backup tool made specifically to backup replicated databases. Repbak will send notifications based on database backup failure. Repbak also optionally support HTTP healthchecks for liveness.
 
 
-# Supported Databases
+# Supported Dumpers
 
 
-- MySQL 5.5 (possibly other MySQL versions but untested)
+- mysqldump
 
 
 # Supported Notifications
@@ -49,7 +49,7 @@ log_level: error
 http:
   addr: 0.0.0.0
   port: 4060
-mysql:
+mysqldump:
   retention: 30
   output_path: /mnt/backups/mysql.dump
   schedule: "0 0 * * *"
@@ -86,7 +86,7 @@ email:
 **port** - The listening port for the HTTP server. Default to 4040
 
 
-## MySQL
+## mysqldump
 
 
 **retention** - The number of backups to keep before rotating old backups out. Defaults to 7.
@@ -95,7 +95,7 @@ email:
 
 **schedule** - The cron expression that defines when backups are created.
     
-**executable_path** - The path to the tool used to create the mysql backup. Defaults to mysqldump.
+**executable_path** - The path to the mysqldump binary. Defaults to mysqldump.
 
 **executable_args** - The arguments passed to the executable used to create the mysql backup. Defaults to --add-drop-database --all-databases.
     
@@ -139,5 +139,5 @@ email:
 - Systemd service file
 - Create rpm
 - Create deb
-- Support for more databases
+- Support for more dumpers
 - Support for more notifiers

@@ -37,9 +37,9 @@ func (r *RepBak) Start() error {
 
 	r.running = true
 
-	log.Infof("Adding Schedule MySQL Backup: %s", r.config.MySQL.Schedule)
+	log.Infof("Adding Schedule MySQL Backup: %s", r.config.MySQLDump.Schedule)
 	// When more dumpers are added this can be generalized
-	_, err := r.crontab.AddFunc(r.config.MySQL.Schedule, func() {
+	_, err := r.crontab.AddFunc(r.config.MySQLDump.Schedule, func() {
 		log.Info("Dumping MySQL database")
 
 		if err := r.backup(); err != nil {
@@ -82,9 +82,9 @@ func (r *RepBak) loop() {
 func (r *RepBak) backup() error {
 	// Rotate the dump files
 	logger := &lumberjack.Logger{
-		Filename:   r.config.MySQL.OutputPath,
+		Filename:   r.config.MySQLDump.OutputPath,
 		MaxSize:    0,
-		MaxBackups: r.config.MySQL.Retention,
+		MaxBackups: r.config.MySQLDump.Retention,
 	}
 	if err := logger.Rotate(); err != nil {
 		if err := r.notifier.Notify(err); err != nil {

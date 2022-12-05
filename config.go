@@ -18,9 +18,9 @@ type Config struct {
 	// LogLevel sets the level of logging. Valid levels are: panic, fatal, trace, debug, warn, info, and error. Defaults to error
 	LogLevel string `yaml:"log_level"`
 
-	HTTP  *HTTP  `yaml:"http"`
-	MySQL *MySQL `yaml:"mysql"`
-	Email *Email `yaml:"email"`
+	HTTP      *HTTP      `yaml:"http"`
+	MySQLDump *MySQLDump `yaml:"mysqldump"`
+	Email     *Email     `yaml:"email"`
 }
 
 // validate both validates the configuration and sets the default options.
@@ -92,35 +92,35 @@ func (c *Config) validate() error {
 		return errors.New("Missing required to entry for email")
 	}
 
-	if c.MySQL == nil {
-		return errors.New("Missing required mysql configuration")
+	if c.MySQLDump == nil {
+		return errors.New("Missing required mysqldump configuration")
 	}
 
-	if c.MySQL.Retention == 0 {
-		c.MySQL.Retention = 7
+	if c.MySQLDump.Retention == 0 {
+		c.MySQLDump.Retention = 7
 	}
 
-	if c.MySQL.OutputPath == "" {
-		return errors.New("Missing required output_path entry for mysql")
+	if c.MySQLDump.OutputPath == "" {
+		return errors.New("Missing required output_path entry for mysqldump")
 	}
 
-	if c.MySQL.Schedule == "" {
-		return errors.New("Missing required schedule entry for mysql")
+	if c.MySQLDump.Schedule == "" {
+		return errors.New("Missing required schedule entry for mysqldump")
 	}
 
-	if c.MySQL.ExecutablePath == "" {
-		c.MySQL.ExecutablePath = "mysqldump"
+	if c.MySQLDump.ExecutablePath == "" {
+		c.MySQLDump.ExecutablePath = "mysqldump"
 	}
 
-	if c.MySQL.ExecutableArgs == "" {
-		c.MySQL.ExecutableArgs = "--add-drop-database --all-databases"
+	if c.MySQLDump.ExecutableArgs == "" {
+		c.MySQLDump.ExecutableArgs = "--add-drop-database --all-databases"
 	}
 
-	if c.MySQL.TimeLimit != "" {
+	if c.MySQLDump.TimeLimit != "" {
 		var err error
-		c.MySQL.timeLimit, err = time.ParseDuration((c.MySQL.TimeLimit))
+		c.MySQLDump.timeLimit, err = time.ParseDuration((c.MySQLDump.TimeLimit))
 		if err != nil {
-			return fmt.Errorf("Failed to parse mysql time_limit: %w", err)
+			return fmt.Errorf("Failed to parse mysqldump time_limit: %w", err)
 		}
 	}
 
@@ -129,7 +129,7 @@ func (c *Config) validate() error {
 }
 
 // MySQL defines how a mysql backup will be created.
-type MySQL struct {
+type MySQLDump struct {
 	// Retention is the number of backups to keep before rotating old backups out. Defaults to 7.
 	Retention int `yaml:"retention"`
 
