@@ -26,7 +26,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dumper := repbak.NewMySQLDumper(config)
+	dumper := repbak.NewMySQLDumpDumper(config)
 
 	notifier := repbak.NewEmailNotifier(config)
 
@@ -48,6 +48,7 @@ func main() {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 
+	// TODO: add a healthcheck that makes sure tha last backup was successful
 	if config.HTTP != nil {
 		http.Handle("/healthcheck", healthcheck.Handler(
 			healthcheck.WithChecker(
