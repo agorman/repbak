@@ -30,6 +30,7 @@ func (c *Config) validate() error {
 	}
 
 	if c.LogLevel == "" {
+		c.LogLevel = "error"
 		log.SetLevel(log.ErrorLevel)
 	} else {
 		switch c.LogLevel {
@@ -54,7 +55,7 @@ func (c *Config) validate() error {
 
 	if c.HTTP != nil {
 		if c.HTTP.Addr == "" {
-			c.HTTP.Addr = "0.0.0.0"
+			c.HTTP.Addr = "127.0.0.1"
 		}
 
 		if c.HTTP.Port == 0 {

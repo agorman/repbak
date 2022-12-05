@@ -81,7 +81,7 @@ email:
 ## HTTP
 
 
-**addr** - The listening address for the HTTP server. Default to 0.0.0.0
+**addr** - The listening address for the HTTP server. Default to 127.0.0.1
 
 **port** - The listening port for the HTTP server. Default to 4040
 
