@@ -26,7 +26,7 @@ func TestConfig(t *testing.T) {
 	assert.Equal(t, config.MySQL.TimeLimit, "8h")
 
 	assert.NotNil(t, config.Email)
-	assert.Equal(t, config.Email.Host, "mail.me.com")
+	assert.Equal(t, config.Email.Host, "1.1.1.1.1")
 	assert.Equal(t, config.Email.Port, 587)
 	assert.Equal(t, config.Email.User, "me")
 	assert.Equal(t, config.Email.Pass, "pass")
@@ -73,7 +73,7 @@ func TestConfigRequired(t *testing.T) {
 	err = config.validate()
 	assert.Error(t, err)
 
-	config.Email.Host = "smtp.me.com"
+	config.Email.Host = "1.1.1.1.1"
 	err = config.validate()
 	assert.Error(t, err)
 
