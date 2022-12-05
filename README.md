@@ -73,105 +73,63 @@ email:
 ## Global Options
 
 
-### log_path
+**log_path** - File on disk where repbak logs will be stored. Defaults to /var/log/repbak.log.
 
-    File on disk where repbak logs will be stored. Defaults to /var/log/repbak.log.
-
-### log_level
-
-    Sets the log level. Valid levels are: panic, fatal, trace, debug, warn, info, and error. Defaults to error.
+**log_level** - Sets the log level. Valid levels are: panic, fatal, trace, debug, warn, info, and error. Defaults to error.
 
 
-## http
+## HTTP
 
 
-### addr
+**addr** - The listening address for the HTTP server. Default to 0.0.0.0
 
-    The listening address for the HTTP server. Default to 0.0.0.0
-
-### port
-
-    The listening port for the HTTP server. Default to 4040
+**port** - The listening port for the HTTP server. Default to 4040
 
 
-## mysql
+## MySQL
 
 
-### retention
+**retention** - The number of backups to keep before rotating old backups out. Defaults to 7.
 
-    The number of backups to keep before rotating old backups out. Defaults to 7.
+**output_path** - The path where backups will be stored.
 
-### output_path
-
-    The path where backups will be stored.
-
-### schedule
-
-    The cron expression that defines when backups are created.
+**schedule** - The cron expression that defines when backups are created.
     
-### executable_path
+**executable_path** - The path to the tool used to create the mysql backup. Defaults to mysqldump.
 
-    The path to the tool used to create the mysql backup. Defaults to mysqldump.
-
-### executable_args
-
-    The arguments passed to the executable used to create the mysql backup. Defaults to --add-drop-database --all-databases.
+**executable_args** - The arguments passed to the executable used to create the mysql backup. Defaults to --add-drop-database --all-databases.
     
-### time_limit
-
-    Optional limit to the time it takes to run the backup.
+**time_limit** - Optional limit to the time it takes to run the backup.
 
 
-## email
+## Email
 
 
-### host
+**host** - The hostname or IP of the SMTP server.
 
-    The hostname or IP of the SMTP server.
+**port** - The port of the SMTP server.
 
-### port
+**user** - The username used to authenticate.
 
-    The port of the SMTP server.
+**pass** - The password used to authenticate.
 
-### user
+**start_tls** - StartTLS enables TLS security. If both StartTLS and SSL are true then StartTLS will be used.
 
-    The username used to authenticate.
+**insecure_skip_verify** - When using TLS skip verifying the server's certificate chain and host name.
 
-### pass
+**ssl** - SSL enables SSL security. If both StartTLS and SSL are true then StartTLS will be used.
 
-    The password used to authenticate.
+**from** - The email address the email will be sent from.
 
-### start_tls
-
-    StartTLS enables TLS security. If both StartTLS and SSL are true then StartTLS will be used.
-
-### insecure_skip_verify
-
-    When using TLS skip verifying the server's certificate chain and host name.
-
-### ssl
-
-    SSL enables SSL security. If both StartTLS and SSL are true then StartTLS will be used.
-
-### from
-
-    The email address the email will be sent from.
-
-### to
-
-	An array of email addresses for which emails will be sent.
+**to** - An array of email addresses for which emails will be sent.
 
 
 # Flags
 
 
-## -conf
+**-conf** - Path to the repbak configuration file
 
-    Path to the repbak configuration file
-
-## -debug
-
-    Log to STDOUT
+**-debug** - Log to STDOUT
 
 
 ## Road Map
