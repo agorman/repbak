@@ -139,3 +139,17 @@ func TestConfigLogLevel(t *testing.T) {
 	err = config.validate()
 	assert.Error(t, err)
 }
+
+func TestConfigOpenInvalid(t *testing.T) {
+	_, err := OpenConfig("./testdata/invalid.yaml")
+	assert.Error(t, err)
+}
+
+func TestConfigBadTimeLimit(t *testing.T) {
+	config, err := OpenConfig("./testdata/repbak.yaml")
+	assert.Nil(t, err)
+
+	config.MySQL.TimeLimit = "asdf"
+	err = config.validate()
+	assert.Error(t, err)
+}
