@@ -67,7 +67,6 @@ func (r *RepBak) Stop() {
 }
 
 func (r *RepBak) loop() {
-	r.running = true
 	r.crontab.Start()
 
 	log.Infof("RepBak started")
