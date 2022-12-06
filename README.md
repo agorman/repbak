@@ -78,6 +78,11 @@ email:
 
 **log_level** - Sets the log level. Valid levels are: panic, fatal, trace, debug, warn, info, and error. Defaults to error.
 
+**lib_path** - The directory on disk where repbak lib files are stored. Defaults to /var/lib/repbak.
+
+**time_format** - The format used when displaying backup stats. See formatting options in the go time.Time package. Defaults to Mon Jan 02 03:04:05 PM MST.
+
+**retention** - The number of stats that are stored for each backup. If set to less than 0 no stats are saved. Defaults to 7.
 
 ## HTTP
 
@@ -123,6 +128,14 @@ email:
 **from** - The email address the email will be sent from.
 
 **to** - An array of email addresses for which emails will be sent.
+
+**history_subject** - An optional subject to use when sending sync history emails. Defaults to Database Backup History.
+
+**history_schedule** - An optional cron expression. If set then an email with sync history will be sent based on the schedule.
+
+**history_template** - 	An optional path to an email template to use when sending history emails. If not set uses the default template.
+
+**on_failure** - An optional value that will send an email for each backup failure if true.
 
 
 # Flags
