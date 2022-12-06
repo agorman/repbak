@@ -1,9 +1,10 @@
 log_path: /var/log/repbak.log
 log_level: debug
+retention: 7
 http:
   addr: 127.0.0.1
   port: 4060
-mysql:
+mysqldump:
   retention: 7
   output_path: /asc/array1/repbak/mysql.dump
   schedule: "* * * * *"
@@ -15,8 +16,10 @@ email:
   pass: coke4200
   starttls: true
   ssl: false
-  subject: MAM Database Replication Failure
+  subject: MAM Database Backup Failure
   from: andyg@apacesystems.com
   to:
     - andy.g.gorman@gmail.com
+  history_schedule: "* * * * *"
+  on_failure: true
 
