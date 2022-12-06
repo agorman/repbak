@@ -40,6 +40,9 @@ The YAML file defines repbak's operation.
 ~~~
 log_path: /var/log/repbak.log
 log_level: error
+lib_path: /var/lib/repbak
+time_format: Mon Jan 02 03:04:05 PM MST
+retention: 7
 http:
   addr: 0.0.0.0
   port: 4060
@@ -61,6 +64,10 @@ email:
   from: me@me.com
   to:
     - you@me.com
+  history_subject: Database Backup History
+  history_schedule: "0 0 * * *"
+  history_template: /home/repbak/email.template
+  on_failure: true
 ~~~
 
 

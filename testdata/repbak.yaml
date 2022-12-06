@@ -26,3 +26,4 @@ email:
     - they@me.com
     - them@me.com
   on_failure: true
+  history_schedule: "0 0 * * *"

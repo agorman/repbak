@@ -217,7 +217,7 @@ type Email struct {
 	// To is an array of email addresses for which emails will be sent.
 	To []string `yaml:"to"`
 
-	// HistorySubject is an optional subject to use when sending sync history emails.
+	// HistorySubject is an optional subject to use when sending sync history emails. Defaults to Database Backup History.
 	HistorySubject string `yaml:"history_subject"`
 
 	// HistorySchedule is a cron expression. If set then an email with sync history will be sent based on the schedule.
