@@ -129,7 +129,7 @@ func (s *BoltDB) prune() error {
 func (s *BoltDB) List() (map[string][]Stat, error) {
 	statMap := make(map[string][]Stat)
 
-	if s.config.Retention < 1 {
+	if s.config.Retention < 0 {
 		return statMap, nil
 	}
 
@@ -168,5 +168,9 @@ func (s *BoltDB) List() (map[string][]Stat, error) {
 
 // Close closes the bolt database file.
 func (s *BoltDB) Close() error {
+	if s.config.Retention < 0 {
+		return nil
+	}
+
 	return s.db.Close()
 }

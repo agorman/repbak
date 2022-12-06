@@ -75,7 +75,7 @@ func TestDBWithoutRetention(t *testing.T) {
 
 	config := &Config{
 		LibPath:   dir,
-		Retention: 0,
+		Retention: -1,
 	}
 
 	db, err := NewBoltDB(config)
