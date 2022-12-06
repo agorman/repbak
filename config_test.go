@@ -10,8 +10,11 @@ func TestConfig(t *testing.T) {
 	config, err := OpenConfig("./testdata/repbak.yaml")
 	assert.Nil(t, err)
 
-	assert.Equal(t, config.LogPath, "/var/log/repbak.log")
-	assert.Equal(t, config.LogLevel, "error")
+	assert.Equal(t, config.LogPath, "/tmp/repbak.log")
+	assert.Equal(t, config.LogLevel, "fatal")
+	assert.Equal(t, config.LibPath, "/tmp/repbak")
+	assert.Equal(t, config.Retention, 10)
+	assert.Equal(t, config.TimeFormat, "2006-01-02T15:04:05Z07:00")
 
 	assert.NotNil(t, config.HTTP)
 	assert.Equal(t, config.HTTP.Addr, "0.0.0.0")
@@ -37,6 +40,7 @@ func TestConfig(t *testing.T) {
 	assert.Contains(t, config.Email.To, "they@me.com")
 	assert.Contains(t, config.Email.To, "them@me.com")
 	assert.Equal(t, config.Email.Subject, "Database Backup Failure")
+	assert.Equal(t, config.Email.OnFailure, true)
 }
 
 func TestConfigDefaults(t *testing.T) {
@@ -49,11 +53,15 @@ func TestConfigDefaults(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, config.LogPath, "/var/log/repbak.log")
 	assert.Equal(t, config.LogLevel, "error")
+	assert.Equal(t, config.LibPath, "/var/lib/repbak")
+	assert.Equal(t, config.Retention, 7)
+	assert.Equal(t, config.TimeFormat, "Mon Jan 02 03:04:05 PM MST")
 
 	assert.Equal(t, config.Email.Port, 25)
 	assert.Equal(t, config.Email.StartTLS, false)
 	assert.Equal(t, config.Email.SSL, false)
 	assert.Equal(t, config.Email.Subject, "Database Replication Failure")
+	assert.Equal(t, config.Email.OnFailure, false)
 
 	assert.Equal(t, config.MySQLDump.Retention, 7)
 	assert.Equal(t, config.MySQLDump.ExecutablePath, "mysqldump")

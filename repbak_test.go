@@ -11,11 +11,15 @@ func TestRepBak(t *testing.T) {
 	config, err := OpenConfig("./testdata/repbak.yaml")
 	assert.Nil(t, err)
 
-	dumper := NewMySQLDumpDumper(config)
+	db, err := NewBoltDB(config)
+	assert.Nil(t, err)
+	defer db.Close()
 
 	notifier := NewEmailNotifier(config)
 
-	rm := New(config, dumper, notifier)
+	dumper := NewMySQLDumpDumper(config)
+
+	rm := New(config, db, dumper, notifier)
 	rm.Start()
 	rm.Start()
 	rm.Stop()

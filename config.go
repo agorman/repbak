@@ -18,6 +18,17 @@ type Config struct {
 	// LogLevel sets the level of logging. Valid levels are: panic, fatal, trace, debug, warn, info, and error. Defaults to error
 	LogLevel string `yaml:"log_level"`
 
+	// LibPath is the directory on disk where repbak lib files are stored. Defaults to /var/lib/repbak.
+	LibPath string `yaml:"lib_path"`
+
+	// The time format used when displaying backup stats. See formatting options in the go time.Time package.
+	// Defaults to Mon Jan 02 03:04:05 PM MST
+	TimeFormat string `yaml:"time_format"`
+
+	// Retention is the number of logs and stats that are stored for each backup. If set to less than 0 no
+	// logs or stats are saved. Defaults to 7.
+	Retention int `yaml:"retention"`
+
 	HTTP      *HTTP      `yaml:"http"`
 	MySQLDump *MySQLDump `yaml:"mysqldump"`
 	Email     *Email     `yaml:"email"`
@@ -51,6 +62,18 @@ func (c *Config) validate() error {
 		default:
 			return fmt.Errorf("Invalid log_level: %s", c.LogLevel)
 		}
+	}
+
+	if c.LibPath == "" {
+		c.LibPath = "/var/lib/repbak"
+	}
+
+	if c.TimeFormat == "" {
+		c.TimeFormat = "Mon Jan 02 03:04:05 PM MST"
+	}
+
+	if c.Retention == 0 {
+		c.Retention = 7
 	}
 
 	if c.HTTP != nil {
@@ -90,6 +113,10 @@ func (c *Config) validate() error {
 
 	if len(c.Email.To) == 0 {
 		return errors.New("Missing required to entry for email")
+	}
+
+	if c.Email.HistorySubject == "" {
+		c.Email.HistorySubject = "Database Backup History"
 	}
 
 	if c.MySQLDump == nil {
@@ -189,6 +216,18 @@ type Email struct {
 
 	// To is an array of email addresses for which emails will be sent.
 	To []string `yaml:"to"`
+
+	// HistorySubject is an optional subject to use when sending sync history emails.
+	HistorySubject string `yaml:"history_subject"`
+
+	// HistorySchedule is a cron expression. If set then an email with sync history will be sent based on the schedule.
+	HistorySchedule string `yaml:"history_schedule"`
+
+	// HistoryTemplate is an optional path to an email template to use when sending history emails. If not set uses the default template.
+	HistoryTemplate string `yaml:"history_template"`
+
+	// OnFailure will send an email for each backup failure if true.
+	OnFailure bool `yaml:"on_failure"`
 }
 
 // OpenConfig returns a new Config option by reading the YAML file at path. If the file

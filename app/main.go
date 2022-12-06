@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/agorman/repbak"
 	"github.com/etherlabsio/healthcheck/v2"
@@ -26,9 +27,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dumper := repbak.NewMySQLDumpDumper(config)
+	db, err := repbak.NewBoltDB(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
 
 	notifier := repbak.NewEmailNotifier(config)
+
+	dumper := repbak.NewMySQLDumpDumper(config)
 
 	if !*debug {
 		logfile := &lumberjack.Logger{
@@ -40,7 +47,7 @@ func main() {
 		log.SetOutput(logfile)
 	}
 
-	rb := repbak.New(config, dumper, notifier)
+	rb := repbak.New(config, db, dumper, notifier)
 	rb.Start()
 	defer rb.Stop()
 
@@ -48,12 +55,35 @@ func main() {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 
-	// TODO: add a healthcheck that makes sure tha last backup was successful
+	// liveness check
 	if config.HTTP != nil {
-		http.Handle("/healthcheck", healthcheck.Handler(
+		http.Handle("/live", healthcheck.Handler(
 			healthcheck.WithChecker(
 				"live", healthcheck.CheckerFunc(
 					func(ctx context.Context) error {
+						return nil
+					},
+				),
+			),
+		))
+
+		// latest backups successful check
+		http.Handle("/health", healthcheck.Handler(
+			healthcheck.WithTimeout(5*time.Second),
+			healthcheck.WithChecker(
+				"health", healthcheck.CheckerFunc(
+					func(ctx context.Context) error {
+						statMap, err := db.List()
+						if err != nil {
+							return err
+						}
+
+						for name, stats := range statMap {
+							if len(stats) > 0 && !stats[0].Success {
+								return fmt.Errorf("One more more backups failed including %s", name)
+							}
+						}
+
 						return nil
 					},
 				),

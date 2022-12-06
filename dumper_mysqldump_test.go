@@ -13,8 +13,8 @@ func TestMySQLDumpDumper(t *testing.T) {
 
 	dumper := NewMySQLDumpDumper(config)
 
-	err = dumper.Dump()
-	assert.Error(t, err)
+	stat := dumper.Dump()
+	assert.Error(t, stat.Error)
 
 	dumper.Stop()
 }

@@ -14,9 +14,13 @@ func TestEmailNotifier(t *testing.T) {
 
 	notifier := NewEmailNotifier(config)
 
-	err = notifier.Notify(nil)
+	stat := NewStat("TEST", "Mon Jan 02 03:04:05 PM MST").Finish(nil)
+
+	err = notifier.Notify(stat)
 	assert.Error(t, err)
 
-	err = notifier.Notify(errors.New("ERROR"))
+	stat = stat.Finish(errors.New("ERROR"))
+
+	err = notifier.Notify(stat)
 	assert.Error(t, err)
 }
