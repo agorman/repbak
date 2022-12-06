@@ -73,8 +73,8 @@ func (d *MySQLDumpDumper) Dump() Stat {
 
 		cmd := exec.CommandContext(ctx, d.config.MySQLDump.ExecutablePath, args...)
 
-		if err := os.MkdirAll(filepath.Base(d.config.MySQLDump.OutputPath), 0644); err != nil {
-			stat.Finish(fmt.Errorf("MySQL Dumper: failed to create dump directory %s: %v", filepath.Base(d.config.MySQLDump.OutputPath), err))
+		if err := os.MkdirAll(filepath.Dir(d.config.MySQLDump.OutputPath), 0644); err != nil {
+			stat.Finish(fmt.Errorf("MySQL Dumper: failed to create dump directory %s: %v", filepath.Dir(d.config.MySQLDump.OutputPath), err))
 			return stat
 		}
 
