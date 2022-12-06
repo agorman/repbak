@@ -21,12 +21,6 @@ Repbak is a simple database backup tool made specifically to backup replicated d
 - Email
 
 
-# HTTP Healthcheck
-
-
-Repbak can optionally listen for HTTP liveness probes at /healthcheck. It will return a 200 status code if live.
-
-
 # How does it work?
 
 
@@ -130,6 +124,16 @@ email:
 **-conf** - Path to the repbak configuration file
 
 **-debug** - Log to STDOUT
+
+
+# HTTP Health Checks
+
+
+The optional HTTP server creates two endpoints.
+
+**/live** - A liveness check that always returns 200. 
+
+**/health** - A health check that returns 200 if the latest run for each backup was successful and 503 otherwise.
 
 
 ## Road Map
